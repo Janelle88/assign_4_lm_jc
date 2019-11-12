@@ -48,3 +48,4 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 #                                                                   x = year + 0.5, 
 #                                                                   y = total, 
 #                                                                   color = site)) ugly
+# Move on to next graph
