@@ -31,14 +31,18 @@ lobster_year <- lobster_df %>%
 ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
   geom_line(aes(color = MPA), size = 1.2) +
   labs(color = "Marine Protected Area (MPA)") +
-  theme_dark() +
+  theme_light() +
   geom_dl(aes(label = site_name, color = MPA), method = list(dl.combine("last.points"), cex = 0.8))+
   theme(legend.position = c(0.29, 0.849)) +
   scale_x_continuous(expand = c(0,0),
                      limits = c(2012,2020.5)) +
   scale_y_continuous(expand = c(0,0),
                      limits = c(0, 1000)) +
-  scale_color_viridis_d()
+  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) 
+  # facet_wrap(~site)
+
+# ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
+#   geom_col()
 
 # geom_text(data = lobster_year %>% filter(year == last(year)), aes(label = site, 
 #                                                                   x = year + 0.5, 
