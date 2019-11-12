@@ -32,7 +32,7 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
   geom_line(aes(color = MPA), size = 1.2) +
   labs(color = "Marine Protected Area (MPA)") +
   theme_light() +
-  geom_dl(aes(label = site_name, color = MPA), method = list(dl.combine("last.points"), cex = 0.8))+
+  geom_dl(aes(label = site_name), method = list(dl.combine("last.points"), cex = 0.8))+
   theme(legend.position = c(0.29, 0.849)) +
   scale_x_continuous(expand = c(0,0),
                      limits = c(2012,2020.5)) +
