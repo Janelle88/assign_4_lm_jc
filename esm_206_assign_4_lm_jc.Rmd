@@ -8,3 +8,19 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
+
+### Introduction
+
+7-8 sentences to understand the purpose/motivation of this research
+
+### Data and Methods
+
+5-6 sentences summarizing the data and how it was analyzed. Briefly describe the variables being studied in this report. Include the types of statistical tests performed, significance level used, and software (with version) for analysis. 
+
+Naples and Isla Vista were designated Marine Protected Areas in January 2012
+
+### Results
+
+##### Results A
+
+group by year, showing changes in annual lobster abundance at the five sites over time
