@@ -13,6 +13,7 @@
 
 library(tidyverse)
 library(janitor)
+library(directlabels)
 
 lobster_df <- read_csv("lobster_abundance_sbc_lter.csv", na = "-99999") %>% 
   clean_names()
@@ -20,10 +21,26 @@ lobster_df <- read_csv("lobster_abundance_sbc_lter.csv", na = "-99999") %>%
 lobster_year <- lobster_df %>% 
   group_by(site, year) %>% 
   summarize("total" = sum(count)) %>% 
-  mutate("mpa" = site %in% c("IVEE", "NAPL"))
+  mutate("MPA" = ifelse(site == "IVEE", "MPA",
+                        ifelse(site == "NAPL", "MPA", "Non-MPA"))) %>% 
+  mutate("site_name" = ifelse(site == "IVEE", "Isla Vista",
+                              ifelse(site == "NAPL", "Naples",
+                                     ifelse(site == "CARP", "Carpinteria",
+                                            ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk")))))
 
-ggplot(data = lobster_year, aes(x = year, y = total)) +
-  geom_line(aes()) +
-  theme_minimal() +
-  scale_x_continuous(expand = c(0,0)) +
-  scale_y_continuous(expand = c(0,0))
+ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
+  geom_line(aes(color = MPA), size = 1.2) +
+  labs(color = "Marine Protected Area (MPA)") +
+  theme_dark() +
+  geom_dl(aes(label = site_name, color = MPA), method = list(dl.combine("last.points"), cex = 0.8))+
+  theme(legend.position = c(0.29, 0.849)) +
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(2012,2020.5)) +
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 1000)) +
+  scale_color_viridis_d()
+
+# geom_text(data = lobster_year %>% filter(year == last(year)), aes(label = site, 
+#                                                                   x = year + 0.5, 
+#                                                                   y = total, 
+#                                                                   color = site)) ugly
