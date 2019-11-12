@@ -26,20 +26,20 @@ lobster_year <- lobster_df %>%
   mutate("site_name" = ifelse(site == "IVEE", "Isla Vista",
                               ifelse(site == "NAPL", "Naples",
                                      ifelse(site == "CARP", "Carpinteria",
-                                            ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk")))))
+                                            ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk"))))) # this allows me to have a new column with the non-abbreviated site names
 
-ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
+ggplot(data = lobster_year, aes(x = year, y = total, group = site)) + # want individual lines by site, need group = site
   geom_line(aes(color = MPA), size = 1.2) +
-  labs(color = "Marine Protected Area (MPA)") +
+  labs(color = "Marine Protected Area (MPA)") + #for some reason color changes the legend title
   theme_light() +
-  geom_dl(aes(label = site_name), method = list(dl.combine("last.points"), cex = 0.8))+
-  theme(legend.position = c(0.29, 0.849)) +
+  geom_dl(aes(label = site_name), method = list(dl.combine("last.points"), cex = 0.8))+ #geom_dl used for direct label, cex is font size, method needs to be written like this
+  theme(legend.position = c(0.29, 0.849)) + # manual repositioning of legend
   scale_x_continuous(expand = c(0,0),
-                     limits = c(2012,2020.5)) +
+                     limits = c(2012,2020.5)) + # needed to expand my limits for site names
   scale_y_continuous(expand = c(0,0),
                      limits = c(0, 1000)) +
   scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) +
-  labs(caption = bold("Figure 1.")~italic("more caption"))
+  labs(caption = bolditalic("Figure 1.")~italic("more caption")) # caption
   
 
 
