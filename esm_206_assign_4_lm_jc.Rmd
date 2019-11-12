@@ -15,6 +15,22 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 
 ### Data and Methods
 
+
+```{r}
+ggplot(data = cb_top_10_join, 
+       aes(y = ces_3_0_score, x = reorder(california_county, desc(mean_ces)))) +
+  geom_jitter(aes(color = california_county),
+              show.legend = FALSE) +
+  scale_color_grey() +
+  geom_boxplot(alpha = 0.5, outlier.color = NA) +
+  coord_flip() +
+  theme_minimal() +
+  labs(title = "CES 3.0 Score by County (Christensen)",
+       x = "CES 3.0 Score",
+       y = "California County",
+       caption = "Data Source: https://oehha.ca.gov/calenviroscreen/maps-data/download-data")
+```
+
 5-6 sentences summarizing the data and how it was analyzed. Briefly describe the variables being studied in this report. Include the types of statistical tests performed, significance level used, and software (with version) for analysis. 
 
 Naples and Isla Vista were designated Marine Protected Areas in January 2012
