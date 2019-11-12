@@ -38,8 +38,10 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
                      limits = c(2012,2020.5)) +
   scale_y_continuous(expand = c(0,0),
                      limits = c(0, 1000)) +
-  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) 
-  # facet_wrap(~site)
+  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) +
+  labs(caption = bold("Figure 1.")~italic("more caption"))
+  
+
 
 # ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 #   geom_col()
