@@ -67,10 +67,16 @@ lobster_size$site_name <- factor(lobster_size$site_name , levels=c("Mohawk", "Ca
 
 ggplot(data = lobster_size, 
        aes(y = size_mm, x = site_name)) +
-   geom_jitter(aes(color = site_name),
-               show.legend = FALSE)  +
-  scale_color_manual(values = c("sandybrown", "sandybrown", "sandybrown", "royalblue4","royalblue4")) +
-  geom_boxplot(aes(fill = year), alpha = 0.5, outlier.color = NA) +
+   geom_jitter(aes(ifelse("Mohawk", group_by(year), group_by(year))),
+               show.legend = FALSE,
+               size = 0.5)  +
+  # scale_color_manual(breaks = c("2012", "2018"), values = c("steelblue", "steelblue2")) +
+  # scale_color_manual(values = c("sandybrown", "sandybrown", "sandybrown", "royalblue4","royalblue4")) +
+  geom_boxplot(aes(fill = as.character(year)), 
+               alpha = 0.5, 
+               outlier.color = NA,
+               show.legend = FALSE) +
+  scale_fill_grey() +
   theme_minimal() +
   labs(title = "x",
        x = "year", 
