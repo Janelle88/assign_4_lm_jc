@@ -14,6 +14,7 @@
 library(tidyverse)
 library(janitor)
 library(directlabels)
+library(plotly)
 
 lobster_size<- read_csv("lobster_abundance_sbc_lter.csv", na = "-99999") %>% 
   clean_names() %>% 
@@ -33,21 +34,20 @@ lobster_size$site_name <- factor(lobster_size$site_name , levels=c("Mohawk", "Ca
 # Graph B
 # --------
 
-##### daphne's comments/advice/love
-# scale_x_discrete(site_name1, site_name2, etc.)
-
-
 ggplot(data = lobster_size, 
-       aes(y = size_mm, x = site_name)) +
-  geom_jitter(aes(color = site_name),
-              show.legend = FALSE) +
+       aes(y = size_mm, x = site_name, fill = as.character(year))) +
+  geom_point(position=position_jitterdodge(), alpha=0.2, aes(color = site_name),
+              show.legend = FALSE,
+              size = 1) +
   scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("sandybrown", "sandybrown", "sandybrown", "royalblue4","royalblue4")) +
-  geom_boxplot(alpha = 0.5, outlier.color = NA) +
+  geom_boxplot(alpha = 0.75, outlier.color = NA) +
+  scale_fill_grey()+
   theme_minimal() +
   labs(title = "x",
      x = "year", 
      y = "size (mm)",
-     caption = "caption")
+     caption = "caption",
+     color = "year")
 
 
 
@@ -56,3 +56,6 @@ ggplot(data = lobster_size,
 # Graph C
 # -------
 
+lobster_size_av <- lobster_size %>% 
+  group_by(MPA, year) %>% 
+  summarize(mpa_av = mean(size_mm, na.rm = TRUE))
