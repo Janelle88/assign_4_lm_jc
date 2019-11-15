@@ -127,3 +127,150 @@ lobster_table %>%
   add_header_above(bold = TRUE,line = TRUE, c("Statistics of Lobsters in the Santa Barbara Channel" = 4))
 
 
+# -------
+# Graph C
+# -------
+
+lobster_size_av <- lobster_size %>% 
+  group_by(MPA, year) %>% 
+  summarize(mpa_av = mean(size_mm, na.rm = TRUE)) %>% 
+  filter(year %in% c(2012, 2018))
+
+# ------
+# graph for MPA sites
+# ------
+
+lobster_size_mpa <- lobster_size %>% 
+  filter(MPA %in% c("MPA"))
+  
+ggplot(data = lobster_size_mpa, aes(x = size_mm,
+                                    fill = as.character(year),
+                                    color = as.character(year))) +
+  # as.character allows me to group them by year
+  geom_density(alpha = 0.3) +
+  scale_fill_manual(breaks = c("2012", 
+                               "2018"), 
+                    values = c("royalblue4", 
+                               "royalblue1")) +
+  # color for fill of the curve
+  scale_color_manual(breaks = c("2012", 
+                                "2018"), 
+                     values = c("royalblue4", 
+                                "royalblue1")) +
+  # color for lines
+  theme_minimal() +
+  theme(legend.position = "none") + # don't want a legend, label manually
+  annotate(
+    geom = "curve", # geom="curve" for curved line, geom="segment" for straight
+    x = 120, # line start
+    y = 0.035, # line start
+    xend = 86,  # line end
+    yend = 0.028,  # line end
+    curvature = .2, # level of curve
+    color = "royalblue1"
+  ) + 
+  # values entered manually for where I want lines to begin and end
+  annotate(geom = "text", 
+           x = 121, # where my text will be
+           y = 0.035, # where my text will be
+           label = "2018", 
+           hjust = "left", 
+           color = "royalblue1") + # annotation for 2018
+  annotate(
+    geom = "curve", # geom="curve" for curved line, geom="segment" for straight
+    x = 85, # start of line
+    y = 0.045, # start of line
+    xend = 65, # end of line
+    yend = 0.037, # end of line
+    curvature = .2, # level of curve
+    color = "royalblue4"
+  ) + 
+  # values entered manually for where I want the lines to begin and end
+  annotate(geom = "text", 
+           x = 86, # where my label will sit
+           y = 0.047, # where my label will sit
+           label = "2012", 
+           hjust = "left", 
+           color = "royalblue4") + # annotation for 2012
+  geom_vline(xintercept = 67.7,
+             color = "royalblue4",
+             linetype = "dashed",
+             size = 0.5) +
+  geom_vline(xintercept = 77.76581,
+             color = "royalblue1",
+             linetype = "dashed",
+             size = 0.5) + # means taken from lobster_size_av dataframe
+  # vline allows me to draw a vertical line of the mean
+  labs(x = "Lobster Length (mm)",
+       y = "Kernel Density",
+       caption = bolditalic("Figure 3.")~italic("more caption"))
+
+# ------
+# graph for Non-MPA sites
+# ------
+  
+
+lobster_size_non_mpa <- lobster_size %>% 
+  filter(MPA %in% c("Non-MPA"))
+
+ggplot(data = lobster_size_non_mpa, aes(x = size_mm, 
+                                        fill = as.character(year),
+                                        color = as.character(year))) +
+  # as.character allows me to graph by year
+  geom_density(alpha = 0.3) +
+  scale_fill_manual(breaks = c("2012", 
+                               "2018"), 
+                    values = c("tomato3", 
+                               "sandybrown")) +
+  # color for fill of the curve
+  scale_color_manual(breaks = c("2012", 
+                                "2018"), 
+                     values = c("tomato3", 
+                                "sandybrown")) +
+  # color for lines
+  theme_minimal() +
+  theme(legend.position = "none") + # don't want a legend, label manually
+  annotate(
+    geom = "curve", # geom="curve" for curved line, geom="segment" for straight
+    x = 117, # line start
+    y = 0.035, # line start
+    xend = 84, # line end
+    yend = 0.028, # line end
+    curvature = .2, # level of curve
+    color = "sandybrown"
+  ) + 
+  annotate(geom = "text", 
+           x = 119, # where my annotation text is
+           y = 0.037, # where my annotation text is
+           label = "2018", 
+           hjust = "left", 
+           color = "sandybrown") + # label for 2018
+  annotate(
+    geom = "curve", # geom="curve" for curved line, geom="segment" for straight
+    x = 120, # line start
+    y = 0.015, # line start
+    xend = 95,  # line end
+    yend = 0.007, # line end
+    curvature = .2, # level of curve
+    color = "tomato3"
+  ) + 
+  annotate(geom = "text", 
+           x = 121, # where my annotation will be
+           y = 0.016, # where my annotation will be
+           label = "2012", 
+           hjust = "left", 
+           color = "tomato3") + # label for 2012
+  geom_vline(xintercept = 74.22581,
+             color = "tomato3",
+             linetype = "dashed",
+             size = 0.5) +
+  geom_vline(xintercept = 73.82468,
+             color = "sandybrown",
+             linetype = "dashed",
+             size = 0.5) + # means taken from lobster_size_av dataframe
+  # vline allows me to draw a vertical line for the means
+  labs(x = "Lobster Length (mm)",
+       y = "Kernel Density",
+       caption = bolditalic("Figure 4.")~italic("more caption"))
+
+
