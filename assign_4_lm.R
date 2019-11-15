@@ -58,4 +58,14 @@ ggplot(data = lobster_size,
 
 lobster_size_av <- lobster_size %>% 
   group_by(MPA, year) %>% 
-  summarize(mpa_av = mean(size_mm, na.rm = TRUE))
+  summarize(mpa_av = mean(size_mm, na.rm = TRUE)) %>% 
+  filter(year %in% c(2012, 2018))
+
+ggplot(data = lobster_size_av, aes(x = year)) +
+  geom_histogram()
+
+# -----------
+# Graph A
+# -----------
+
+
