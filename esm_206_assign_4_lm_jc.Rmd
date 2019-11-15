@@ -16,20 +16,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ### Data and Methods
 
 
-```{r}
-ggplot(data = cb_top_10_join, 
-       aes(y = ces_3_0_score, x = reorder(california_county, desc(mean_ces)))) +
-  geom_jitter(aes(color = california_county),
-              show.legend = FALSE) +
-  scale_color_grey() +
-  geom_boxplot(alpha = 0.5, outlier.color = NA) +
-  coord_flip() +
-  theme_minimal() +
-  labs(title = "CES 3.0 Score by County (Christensen)",
-       x = "CES 3.0 Score",
-       y = "California County",
-       caption = "Data Source: https://oehha.ca.gov/calenviroscreen/maps-data/download-data")
-```
 
 5-6 sentences summarizing the data and how it was analyzed. Briefly describe the variables being studied in this report. Include the types of statistical tests performed, significance level used, and software (with version) for analysis. 
 
@@ -40,3 +26,105 @@ Naples and Isla Vista were designated Marine Protected Areas in January 2012
 ##### Results A
 
 group by year, showing changes in annual lobster abundance at the five sites over time
+
+```{r}
+# -------------------------
+# Attach necessary packages
+# -------------------------
+library(tidyverse)
+library(janitor)
+library(directlabels)
+library(kableExtra)
+library(ggrepel)
+
+```
+
+```{r}
+# ----------------------
+# Graph A data cleaning
+# ----------------------
+
+lobster_df <- read_csv("lobster_abundance_sbc_lter.csv", 
+# Read in lobster_abundance_sbc_lter,csv
+# and assign it to an object.                      
+                        na = "-99999") %>% 
+# Change -99999 values to na's.
+# Pipe to move to the next step.
+  clean_names()
+# Simplify names to contain only _, character, 
+# numbers, and letters.
+
+lobster_year <- lobster_df %>% 
+# Call the data and assign it to an object.
+# Pipe to move to the next step.
+  group_by(site, year) %>% 
+# Group receiving site and year by collapsing 
+# multiple data points into a single row,
+# based on what is summarized in the next step.
+# Pipe to move to the next step.
+  summarize("total" = sum(count)) %>% 
+# Summarize (new column = whatever you're doing(metric)).
+  mutate("MPA" = ifelse(site == "IVEE", "MPA",
+                        ifelse(site == "NAPL", "MPA", "Non-MPA"))) %>% 
+# Create a new column differientiating sites as MPA or Non-MPA.
+# Pipe to move to the next step.
+  mutate("site_name" = ifelse(site == "IVEE", "Isla Vista",
+                              ifelse(site == "NAPL", "Naples",
+                                     ifelse(site == "CARP", "Carpinteria",
+                                            ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk"))))) 
+# Create a new column containing non-abbreviated site names.
+
+```
+
+```{r}
+# ---------------
+# Check out data
+# ---------------
+
+View(lobster_year)
+
+```
+
+
+```{r}
+
+# ---------------
+# Create Graph A
+# ---------------
+
+ggplot(data = lobster_year, aes(x = year, y = total, group = site)) + 
+# Create a graph and call out data to be used,
+# including what the x and y variables are.
+# To create individual lines by site, need group = site.
+  geom_line(aes(color = MPA), size = 1.2) +
+# Color lines by site and specify line size
+  labs(color = "Marine Protected Area (MPA)",
+       x = "Year",
+       y = "Annual lobster abundance (counts)",
+       title = "Changes in annual lobster abundance (counts) by site") + 
+# Use color to create the legend title and create 
+# labels for the x and y axes and title.
+  theme_light() +
+# Call out a theme to tweak the display of an existing theme.
+  geom_dl(aes(label = site_name), 
+          method = list(dl.combine("last.points"), 
+                        cex = .8)) + 
+# Use geom_dl for direct labels on the lines, cex is font size, 
+# method needs to be written like this.
+  theme(legend.position = c(0.29, 0.837)) + 
+# Manually reposition legend.
+  scale_x_continuous(expand = c(0,0),
+                     limits = c(2012,2020.5)) + 
+# Needed to expand limits for site names.
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0, 1000)) +
+# Needed to expand limits for site names.
+  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) +
+# Manually change line colors in graph based on 
+# whether a site is MPA or Non-MPA.
+  labs(caption = bolditalic("Figure 1.")~italic("more caption")) 
+# Create caption below the graph and edit font size and style.
+
+```
+
+
