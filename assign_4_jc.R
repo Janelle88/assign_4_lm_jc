@@ -16,6 +16,9 @@ library(janitor)
 library(directlabels)
 library(kableExtra)
 
+# -------
+# graph A data cleaning
+# -------
 lobster_df <- read_csv("lobster_abundance_sbc_lter.csv", na = "-99999") %>% 
   clean_names()
 
@@ -29,6 +32,9 @@ lobster_year <- lobster_df %>%
                                      ifelse(site == "CARP", "Carpinteria",
                                             ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk"))))) # this allows me to have a new column with the non-abbreviated site names
 
+# ------
+# Graph A
+# ------
 
 ggplot(data = lobster_year, aes(x = year, y = total, group = site)) + # want individual lines by site, need group = site
   geom_line(aes(color = MPA), size = 1.2) +
@@ -42,26 +48,11 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) + # want ind
                      limits = c(0, 1000)) +
   scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) +
   labs(caption = bolditalic("Figure 1.")~italic("more caption")) # caption
-  
-
-lobster_size<- read_csv("lobster_abundance_sbc_lter.csv", na = "-99999") %>% 
-  clean_names() %>% 
-  filter(year %in% c("2012", "2018")) %>% 
-  group_by(site, year) %>% 
-  select(year, site, size_mm) %>% 
-  mutate("MPA" = ifelse(site == "IVEE", "MPA",
-                        ifelse(site == "NAPL", "MPA", "Non-MPA"))) %>% 
-  mutate("site_name" = ifelse(site == "IVEE", "Isla Vista",
-                              ifelse(site == "NAPL", "Naples",
-                                     ifelse(site == "CARP", "Carpinteria",
-                                            ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk")))))
-
-lobster_size$site_name <- factor(lobster_size$site_name , levels=c("Mohawk", "Carpinteria", "Arroyo Quemado", "Naples", "Isla Vista"))
 
 lobster_year_test <- t.test(lobster_year$year, ) # I don't think this shows anything at all
 
 # --------
-# Graph B
+# Graph B data cleaning
 # --------
 
 ##### daphne's comments/advice/love
