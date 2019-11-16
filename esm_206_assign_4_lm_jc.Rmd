@@ -5,19 +5,27 @@ date: "11/11/2019"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=FALSE, warning=FALSE, message=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 ### Introduction
 
-7-8 sentences to understand the purpose/motivation of this research
+
+The California Spiny Lobster (*panulirus interruptus*) is an important species in the kelp forests in California. Lobsters are a vital predator of kelp-eating sea urchins. Without predation, sea urchins have the ability to demolish kelp forests and create urchin barrens, destroying the ecological diversity that kelp forests create.
+
+The Santa Barbara Chanel Long Term Ecological Research (SBC LTER)
+
+![Spiny Lobster](pictures/catalina_island_marine_institute.jpg)
+[Catalina Island Marine Institute(https://cimioutdoored.org/wp-content/uploads/2017/09/California-Spiny-Lobster.jpg)]
+
+![Santa Barbara Channel Long Term Ecological Research Sites](pictures/sb_coast.png)
+
 
 ### Data and Methods
 
-
-
-5-6 sentences summarizing the data and how it was analyzed. Briefly describe the variables being studied in this report. Include the types of statistical tests performed, significance level used, and software (with version) for analysis. 
+Data for this project was collected from 2012-2018 by the Santa Barbara Chanel Long Term Ecological Research team. Lobster numbers and sizes were collected by divers at 5 sites, including two Marine Protected Areas (Naples and Isla Vista) and three (Arroyo Quemado, Mohawk and Carpinteria). All samples were gathered in the late summer before the start of the fishing season.
+ 
 
 Naples and Isla Vista were designated Marine Protected Areas in January 2012
 
@@ -27,7 +35,7 @@ Naples and Isla Vista were designated Marine Protected Areas in January 2012
 
 group by year, showing changes in annual lobster abundance at the five sites over time
 
-```{r}
+```{r, echo=FALSE}
 # -------------------------
 # Attach necessary packages
 # -------------------------
@@ -40,7 +48,7 @@ library(plotly)
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 # ------------------------------
 # Create clean data for Graph A
 # ------------------------------
@@ -77,7 +85,7 @@ lobster_year <- lobster_df %>%
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 # ---------------
 # Check out data
 # ---------------
@@ -127,7 +135,7 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 
 ```
 
-```{r}
+```{r, echo=FALSE}
 # ------------------------------
 # Create clean data for Graph B
 # ------------------------------
