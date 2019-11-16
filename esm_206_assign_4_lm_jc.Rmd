@@ -36,13 +36,14 @@ library(janitor)
 library(directlabels)
 library(kableExtra)
 library(ggrepel)
+library(plotly)
 
 ```
 
 ```{r}
-# ----------------------
-# Graph A data cleaning
-# ----------------------
+# ------------------------------
+# Create clean data for Graph A
+# ------------------------------
 
 lobster_df <- read_csv("lobster_abundance_sbc_lter.csv", 
 # Read in lobster_abundance_sbc_lter,csv
@@ -87,7 +88,6 @@ View(lobster_year)
 
 
 ```{r}
-
 # ---------------
 # Create Graph A
 # ---------------
@@ -97,7 +97,7 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 # including what the x and y variables are.
 # To create individual lines by site, need group = site.
   geom_line(aes(color = MPA), size = 1.2) +
-# Color lines by site and specify line size
+# Color lines by site and specify line size.
   labs(color = "Marine Protected Area (MPA)",
        x = "Year",
        y = "Annual lobster abundance (counts)",
@@ -127,4 +127,102 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 
 ```
 
+```{r}
+# ------------------------------
+# Create clean data for Graph B
+# ------------------------------
+
+lobster_size <- lobster_df %>% 
+# Call out data and assign it to an object.
+# Pipe to move to the next step.
+  filter(year %in% c("2012", "2018")) %>% 
+# Filter out the observations during the years 2012 and 2018.
+  group_by(site, year) %>% 
+# Group receiving site and year by collapsing 
+# multiple data points into a single row.
+# Pipe to move to the next step.
+  select(year, site, size_mm) %>% 
+# Select specific columns to keep in the data frame.
+  mutate("MPA" = ifelse(site == "IVEE", "MPA",
+                        ifelse(site == "NAPL", "MPA", "Non-MPA"))) %>% 
+# Create a new column differientiating sites as MPA or Non-MPA.
+# Pipe to move to the next step.
+  mutate("site_name" = ifelse(site == "IVEE", "Isla Vista",
+                              ifelse(site == "NAPL", "Naples",
+                                     ifelse(site == "CARP", "Carpinteria",
+                                            ifelse(site == "AQUE", "Arroyo Quemado", "Mohawk")))))
+# Create a new column containing non-abbreviated site names.  
+lobster_size$site_name <- factor(lobster_size$site_name , levels=c("Mohawk", "Carpinteria", "Arroyo Quemado", "Naples", "Isla Vista"))
+# Create a specific order for the observations according to site names.
+
+```
+
+```{r}
+# ---------------
+# Create Graph B
+# ---------------
+
+ggplot(data = lobster_size, 
+       aes(y = size_mm, x = site_name, fill = as.character(year))) +
+# Create a graph and call out data to be used,
+# including what the x and y variables are.
+# Assign year as a character rather than a numeric value 
+# to be able to group it.
+  geom_point(position=position_jitterdodge(), 
+# Call out the type of graph and use jitterdodge
+# to differentiate site specific data according to the year.
+             alpha=0.2, aes(color = site_name),
+              show.legend = FALSE,
+              size = 1) +
+# Specify dot size and transparency.
+# Assign colors to the different sites. 
+  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("sandybrown", "sandybrown", "sandybrown", "royalblue4","royalblue4")) +
+# Manually assign colors to each site in a specific order.
+  geom_boxplot(alpha = 0.75, outlier.color = NA) +
+# Create a box plot graph.
+  scale_fill_grey(name = "Year") +
+# Assign gray colors to the box plot graph.
+# Create a title for the legend.
+  theme_minimal() +
+# Call out a theme to tweak the display of an existing theme.
+  labs(title = "Lobster size distribution shifts in 2012 vs. 2018",
+     x = "Year", 
+     y = "Size (mm)",
+     caption = bolditalic("Figure 2.")~italic("more caption")) +
+# Create labels for the x and y axes and title.
+# Create caption below the graph and edit font size and style.
+    geom_vline(xintercept = 3.5, 
+             linetype = "dashed", 
+             color = "black", 
+             size = .5) +
+# Create a vertical line and call out the line
+# type, color, and size.
+  annotate("text", x = 2,
+           y = 140,
+           label = c("Non-MPA"),
+           size = 3) +
+# Add text to a specific point on the graph and call out
+# the font size.
+    annotate("text", x = 4.5,
+           y = 140,
+           label = c("MPA"),
+           size = 3) +
+# Add text to a specific point on the graph and call out 
+# the font size. 
+  geom_point(aes(x = 1.65,
+                 y = 140),
+             colour = "sandybrown",
+             size = 1,
+             show.legend = FALSE) +
+# Add a bullet to a specific point on the graph and call out
+# the color and size.
+  geom_point(aes(x = 4.3,
+                 y = 140),
+             colour = "royalblue4",
+             size = 1,
+             show.legend = FALSE)
+# Add a bullet to a specific point on the graph and call out
+# the color and size.
+
+```
 
