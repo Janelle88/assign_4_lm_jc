@@ -273,4 +273,38 @@ ggplot(data = lobster_size_non_mpa, aes(x = size_mm,
        y = "Kernel Density",
        caption = bolditalic("Figure 4.")~italic("more caption"))
 
+# mpa 2012-2018 t.test
+# null hypothesis - the means are not significantly different
+# alternative - the means are significantly different
 
+lobster_size_mpa_2012 <- lobster_size_mpa %>% 
+  filter(year == 2012)
+
+lobster_size_mpa_2018 <- lobster_size_mpa %>% 
+  filter(year == 2018)
+
+mpa_2012_2018_ttest <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_mpa_2018$size_mm)
+
+#non-mpa 2012-2018 t.test
+# null hypothesis - the means are not significantly different
+# alternative - the means are significantly different
+
+lobster_size_non_mpa_2012 <- lobster_size_non_mpa %>% 
+  filter(year == 2012)
+
+lobster_size_non_mpa_2018 <- lobster_size_non_mpa %>% 
+  filter(year == 2018)
+
+non_mpa_2012_2018_ttest <- t.test(lobster_size_non_mpa_2012$size_mm, lobster_size_non_mpa_2018$size_mm)
+
+# mpa vs non-mpa 2012 t.test
+# null hypothesis - the means are not significantly different
+# alternative - the means are significantly different
+
+mpa_non_mpa_2012_ttest <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_non_mpa_2012$size_mm)
+
+#mpa vs non-mpa 2018 t.test
+# null hypothesis - the means are not significantly different
+# alternative - the means are significantly different
+
+mpa_non_mpa_2018_ttest <- t.test(lobster_size_mpa_2018$size_mm, lobster_size_non_mpa_2018$size_mm)
