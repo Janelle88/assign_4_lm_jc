@@ -311,3 +311,31 @@ mpa_non_mpa_2012_ttest <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_non
 # alternative - there is a significant difference between means in the mpa and non-mpa sites between in 2018
 
 mpa_non_mpa_2018_ttest <- t.test(lobster_size_mpa_2018$size_mm, lobster_size_non_mpa_2018$size_mm)
+
+MPA_lobster_year_2012 <- lobster_year %>%
+  filter(year == 2012) %>% 
+  filter(MPA == c("MPA")) %>% 
+  group_by(year) %>% 
+  summarise(total_count = sum(total))
+
+MPA_lobster_year_2012 <- lobster_year %>%
+  filter(year %in% c(2012, 2018)) %>% 
+  filter(MPA == c("MPA")) %>% 
+  group_by(year) %>% 
+  summarise(total_count = sum(total)) %>% 
+  mutate(avg_growth_mpa = )
+
+#avg_growth_mpa = MPA_lobster_year_2012
+  
+  
+MPA_lobster_year_2018 <- lobster_year %>%
+  filter(year == 2018) %>% 
+  filter(MPA == c("MPA")) %>% 
+  group_by(year) %>% 
+  summarise(total_count = sum(total)) 
+
+
+
+MPA_join_counts <- 
+  full_join(MPA_lobster_year_2012, MPA_lobster_year_2018,
+            by = "total_count")
