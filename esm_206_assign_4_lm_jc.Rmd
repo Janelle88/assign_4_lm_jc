@@ -16,10 +16,9 @@ The California Spiny Lobster (*panulirus interruptus*) is an important species i
 
 The Santa Barbara Chanel Long Term Ecological Research (SBC LTER)
 
-![Spiny Lobster](pictures/catalina_island_marine_institute.jpg)
-[Catalina Island Marine Institute(https://cimioutdoored.org/wp-content/uploads/2017/09/California-Spiny-Lobster.jpg)]
-
 ![Santa Barbara Channel Long Term Ecological Research Sites](pictures/sb_coast.png)
+
+![Spiny Lobster](pictures/catalina_island_marine_institute.jpg)
 
 
 ### Data and Methods
@@ -45,6 +44,8 @@ library(directlabels)
 library(kableExtra)
 library(ggrepel)
 library(plotly)
+library(gridExtra)
+library(grid)
 
 ```
 
@@ -246,7 +247,9 @@ lobster_size_av <- lobster_size %>%
 
 ```
 
+
 ```{r}
+
 # ---------------------------------------------------
 # Create data for part 1 of Graph C - MPA sites only
 # ---------------------------------------------------
@@ -256,15 +259,11 @@ lobster_size_mpa <- lobster_size %>%
 # Pipe to move to the next step.
   filter(MPA %in% c("MPA"))
 # Filter out the observations that are MPA.
-
-```
-
-```{r}
 # ---------------------------------------------------
 # Create part 1 of Graph C - MPA sites only
 # ---------------------------------------------------
 
-ggplot(data = lobster_size_mpa, aes(x = size_mm,
+mpa_graph <- ggplot(data = lobster_size_mpa, aes(x = size_mm,
 # Create a graph and call out data to be used,
 # including what the x variable is.
                                     fill = as.character(year),
@@ -349,9 +348,7 @@ ggplot(data = lobster_size_mpa, aes(x = size_mm,
 # Create labels for the x and y axes and title.
 # Create caption below the graph and edit font size and style.
 
-```
 
-```{r}
 # -------------------------------------------------------
 # Create data for part 2 of Graph C - Non-MPA sites only
 # -------------------------------------------------------
@@ -362,14 +359,11 @@ lobster_size_non_mpa <- lobster_size %>%
   filter(MPA %in% c("Non-MPA"))
 # Filter out the observations that are MPA.
 
-```
-
-```{r}
 # ---------------------------------------------------
 # Create part 2 of Graph C - Non-MPA sites only
 # ---------------------------------------------------
 
-ggplot(data = lobster_size_non_mpa, aes(x = size_mm, 
+non_mpa_graph <- ggplot(data = lobster_size_non_mpa, aes(x = size_mm, 
 # Create a graph and call out data to be used,
 # including what the x variable is.
                                         fill = as.character(year),
@@ -450,6 +444,8 @@ ggplot(data = lobster_size_non_mpa, aes(x = size_mm,
        caption = bolditalic("Figure 4.")~italic("more caption"))
 # Create labels for the x and y axes and title.
 # Create caption below the graph and edit font size and style.
+
+grid.arrange(mpa_graph, non_mpa_graph, ncol = 2)
 
 ```
 
