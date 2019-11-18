@@ -12,7 +12,12 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 ### Introduction
 
 
-The California Spiny Lobster (*panulirus interruptus*) is an important species in the kelp forests in California. Lobsters are a vital predator of kelp-eating sea urchins. Without predation, sea urchins have the ability to demolish kelp forests and create urchin barrens, destroying the ecological diversity that kelp forests create.
+The California Spiny Lobster (*panulirus interruptus*) is an important species in the kelp forests in California. Lobsters are a vital predator of kelp-eating sea urchins. Without predation, sea urchins have the ability to demolish kelp forests and create urchin barrens, destroying the ecological diversity that kelp forests create. The benefits of spiny lobsters for kelp forests has been widely studied and monitoring their abundance in these ecosystems is crucial to maintain them (Foster and Schiel 2010).
+
+The Santa Barbara Channel Long Term Ecological Research (SBC LTER) has been monitoring the abundance of fish, invertebrates and algae in five sites from the Santa Barbara channel since 2001. They then started gathering data on spiny lobster abundance in 2012. In January 2012, two of the five sites, Isla Vista and Naples, were designated Marine Protected Areas (MPA).
+
+We will use the collected data to compare the differences in sites that are Marine Protected Areas and non-Marine Protected Areas between 2012 - 2018. Marine Protected areas provide a unique ability to monitor the growth of abundance in spiny lobsters due to the restrictions on fishing in these areas.
+
 
 Figure 1. The Santa Barbara Chanel Long Term Ecological Research (SBC LTER)
 ![Santa Barbara Channel Long Term Ecological Research Sites](pictures/sb_coast.png)
@@ -24,10 +29,7 @@ Credit: [Catalina Island Marine Institute](https://cimioutdoored.org/wp-content/
 
 ### Data and Methods
 
-Data for this project was collected from 2012-2018 by the Santa Barbara Chanel Long Term Ecological Research team. Lobster numbers and sizes were collected by divers at 5 sites, including two Marine Protected Areas (Naples and Isla Vista) and three (Arroyo Quemado, Mohawk and Carpinteria). All samples were gathered in the late summer before the start of the fishing season.
- 
-
-Naples and Isla Vista were designated Marine Protected Areas in January 2012.
+Data for this project was collected from 2012 - 2018 by the Santa Barbara Channel Long Term Ecological Research team. Lobster numbers and sizes were collected by divers at five sites, including two Marine Protected Areas (Naples and Isla Vista) and three Non-Marine Protected Areas (Arroyo Quemado, Mohawk and Carpinteria). All the samples were gathered in the late summer before the start of the fishing season. All the data was gathered in four 300m^2 area (60m x 5m ) lobster transects. Trends in Marine Protected Areas were compared with trends in Non-Marine protected Areas. All data was analyzed and put into figures through the software R version 3.6.1. 
 
 ### Results
 
@@ -138,7 +140,7 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 
 ##### 2. Lobster size distribution shifts in each site between the years 2012 and 2018
 
-Lobster sizes in the three Non-Marine Protected Areas were observed to have less than noticeable shifts in lobster sizes whereas lobsters. While lobster sizes in Marine Protected Areas did have noticeable shifts. 
+Lobster sizes in the three Non-Marine Protected Areas were observed to have less than noticeable shifts in lobster sizes. While lobster sizes in Marine Protected Areas did have noticeable shifts. 
 
 ```{r}
 # ------------------------------
@@ -253,7 +255,7 @@ lobster_size_av <- lobster_size %>%
 
 
 
-```{r, fig.cap="Figure 5: Lobster size in Marine Protectd Areas and Non-Marine Protected Areas in 2012 and 2018 kernal denisty for mean lobster size in Marine Protected Areas in 2012 (dark blue) and 2018 (light blue) and Non-Marine Protected Areas in 2012 (dark orange) and 2018 (light orange). The means are shown as dashed lines. Data: SBC LTER"}
+```{r, fig.cap="Figure 5: Lobster size in Marine Protectd Areas and Non-Marine Protected Areas in 2012 and 2018 kernal density for mean lobster size in Marine Protected Areas in 2012 (dark blue) and 2018 (light blue) and Non-Marine Protected Areas in 2012 (dark orange) and 2018 (light orange). The means are shown as dashed lines. Data: SBC LTER"}
 
 # ---------------------------------------------------
 # Create data for part 1 of Graph C - MPA sites only
