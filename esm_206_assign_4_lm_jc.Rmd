@@ -90,8 +90,9 @@ lobster_year <- lobster_df %>%
 # ---------------
 # Check out data
 # ---------------
+# comment out data viewing so it doesn't show up when knitting document
 
-View(lobster_year)
+# View(lobster_year)
 
 ```
 
@@ -142,6 +143,7 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 # ------------------------------
 
 lobster_size <- lobster_df %>% 
+  uncount(count) %>% 
 # Call out data and assign it to an object.
 # Pipe to move to the next step.
   filter(year %in% c("2012", "2018")) %>% 
@@ -448,4 +450,133 @@ non_mpa_graph <- ggplot(data = lobster_size_non_mpa, aes(x = size_mm,
 grid.arrange(mpa_graph, non_mpa_graph, ncol = 2)
 
 ```
+```{r, include = FALSE}
+# -------------
+# visually explore the data for lobster size
+# -------------
+# let's visually explore this data and explore the means of the data
 
+ggplot(data = lobster_size, aes(x = size_mm)) +
+  geom_histogram() +
+  facet_wrap(~site)
+
+# means look evenly distributed, but let's do a qq plot to make sure
+
+ggplot(data = lobster_size, aes(sample = size_mm)) +
+  geom_qq() +
+  facet_wrap(~site)
+
+# means look normally distributed, despite a few outliers at carpinteria and IV
+
+```
+
+```{r}
+# -------------
+# Make summary table
+# -------------
+
+# to really see the data, I'm going to make a summary table
+
+lobster_table <- lobster_size %>% 
+  group_by(MPA, year) %>% 
+  summarize(mean_size = mean(size_mm, na.rm = TRUE),
+            sd_size = sd(size_mm, na.rm = TRUE),
+            lobster_number = n())
+
+# to make the table accessible on an html I will use the kable function
+
+lobster_table %>% 
+  kable(col.names = c("Marine Protected Area (MPA)",
+                      "Year",
+                      "Mean Lobster Size (cm)",
+                      "Standard Deviation of Lobster Size",
+                      "Number of Lobsters")) %>% 
+  kable_styling(bootstrap_options = "striped",
+                full_width = F,
+                position = "center") %>% 
+  add_header_above(bold = TRUE,line = TRUE, c("Statistics of Lobsters in the Santa Barbara Channel" = 5))
+```
+
+
+```{r}
+# ------------
+# Run t.tests.
+# ------------
+
+# need to filter the dataframes because a t.test within the columns doesn't work
+
+lobster_size_non_mpa_2012 <- lobster_size_non_mpa %>% 
+  filter(year == 2012)
+
+lobster_size_non_mpa_2018 <- lobster_size_non_mpa %>% 
+  filter(year == 2018)
+
+lobster_size_mpa_2012 <- lobster_size_mpa %>% 
+  filter(year == 2012)
+
+lobster_size_mpa_2018 <- lobster_size_mpa %>% 
+  filter(year == 2018)
+
+# mpa 2012-2018 t.test
+# null hypothesis - there is no significant difference between means in the mpa sites between 2012 and 2018
+# alternative - there is a significant difference between means in the mpa sites between 2012 and 2018
+
+
+mpa_2012_2018_ttest <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_mpa_2018$size_mm)
+
+#non-mpa 2012-2018 t.test
+# null hypothesis - there is no significant difference between means in the non-mpa sites between 2012 and 2018
+# alternative - there is a significant difference between means in the non-mpa sites between 2012 and 2018
+
+non_mpa_2012_2018_ttest <- t.test(lobster_size_non_mpa_2012$size_mm, lobster_size_non_mpa_2018$size_mm)
+
+# mpa vs non-mpa 2012 t.test
+# null hypothesis - there is no significant difference between means between the mpa and non-mpa sites in 2012
+# alternative - there is a significant difference between means in the mpa and non-mpa sites between in 2012
+
+mpa_non_mpa_2012_ttest <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_non_mpa_2012$size_mm)
+
+#mpa vs non-mpa 2018 t.test
+# null hypothesis - there is no significant difference between means between the mpa and non-mpa sites in 2018
+# alternative - there is a significant difference between means in the mpa and non-mpa sites between in 2018
+
+mpa_non_mpa_2018_ttest <- t.test(lobster_size_mpa_2018$size_mm, lobster_size_non_mpa_2018$size_mm)
+
+mpa_lobster_count <- lobster_year %>%
+  filter(year %in% c(2012, 2018)) %>%
+  filter(MPA == c("MPA")) %>%
+  group_by(year) %>%
+  summarise(total_count = sum(total))
+
+non_mpa_lobster_count <- lobster_year %>%
+  filter(year %in% c(2012, 2018)) %>%
+  filter(MPA == c("Non-MPA")) %>%
+  group_by(year) %>%
+  summarise(total_count = sum(total))
+
+# Sample size (non-NA):
+n_mpa <- sum(mpa_lobster_count$total_count)
+n_non_mpa <- sum(non_mpa_lobster_count$total_count)
+
+# Means:
+mean_mpa <- mean(lobster_size_mpa$size_mm, na.rm = TRUE)
+mean_non_mpa <- mean(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+
+# Medians:
+median_mpa <- median(lobster_size_mpa$size_mm, na.rm = TRUE)
+median_non_mpa <- median(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+
+# Standard deviations:
+sd_mpa <- sd(lobster_size_mpa$size_mm, na.rm = TRUE)
+sd_non_mpa <- sd(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+
+```
+
+
+for the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean is `r round(mean_mpa, 2)` $\pm$ `r round(sd_mpa, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p = `r round(mpa_2012_2018_ttest$p.value, 4)`)
+
+for the three Non-Marine Protected Areas, comparing the means between 2012 and 2018, the mean is `r round(mean_non_mpa, 2)` $\pm$ `r round(sd_non_mpa, 2)` (two-sited t-test, t(`r round(non_mpa_2012_2018_ttest$parameter, 2)`) = `r round(non_mpa_2012_2018_ttest$statistic, 2)`, p = `r round(non_mpa_2012_2018_ttest$p.value, 2)`)
+
+for 2012, between Marine Protected Areas and Non-Marine Protected Areas (two-sided t-test, t(`r round(mpa_non_mpa_2012_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2012_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2012_ttest$p.value, 4)`)
+
+for 2018, between Marine Protected Areas and Non-Marine Protected Areas (two - sided t-test t(`r round(mpa_non_mpa_2018_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2018_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2018_ttest$p.value, 4)`)

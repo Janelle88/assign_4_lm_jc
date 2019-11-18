@@ -61,6 +61,7 @@ lobster_year_test <- t.test(lobster_year$year, ) # I don't think this shows anyt
 
 lobster_size<- read_csv("lobster_abundance_sbc_lter.csv", na = "-99999") %>% 
   clean_names() %>% 
+  uncount(count) %>% 
   filter(year %in% c("2012", "2018")) %>% 
   group_by(site, year) %>% 
   select(year, site, size_mm) %>% 
