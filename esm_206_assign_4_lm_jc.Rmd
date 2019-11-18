@@ -481,7 +481,8 @@ lobster_table <- lobster_size %>%
   group_by(MPA, year) %>% 
   summarize(mean_size = mean(size_mm, na.rm = TRUE),
             sd_size = sd(size_mm, na.rm = TRUE),
-            lobster_number = n())
+            lobster_number = n()) %>% 
+  mutate_if(is.numeric, round, 2)
 
 # to make the table accessible on an html I will use the kable function
 
@@ -554,7 +555,7 @@ non_mpa_lobster_count <- lobster_year %>%
   group_by(year) %>%
   summarise(total_count = sum(total))
 
-# Sample size (non-NA):
+# Sample size:
 n_mpa <- sum(mpa_lobster_count$total_count)
 n_non_mpa <- sum(non_mpa_lobster_count$total_count)
 
