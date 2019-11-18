@@ -47,7 +47,7 @@ library(ggrepel)
 library(plotly)
 library(gridExtra)
 library(grid)
-
+library(effsize)
 ```
 
 ```{r, echo=FALSE}
@@ -253,7 +253,7 @@ lobster_size_av <- lobster_size %>%
 
 
 
-```{r, fig.cap="Figure 5: Lobster size in Marine Protectd Areas and Non-Marine Protected Areas in 2012 and 2018 kernal denisty for mean lobster size in Marine Protected Areas in 2012 (dark blue) and 2018 (light blue) and Non-Marine Protected Areas in 2012 (dark orange) and 2018 (light orange). The means are shown as dashed lines. Data: SBC LTER}
+```{r, fig.cap="Figure 5: Lobster size in Marine Protectd Areas and Non-Marine Protected Areas in 2012 and 2018 kernal denisty for mean lobster size in Marine Protected Areas in 2012 (dark blue) and 2018 (light blue) and Non-Marine Protected Areas in 2012 (dark orange) and 2018 (light orange). The means are shown as dashed lines. Data: SBC LTER"}
 
 # ---------------------------------------------------
 # Create data for part 1 of Graph C - MPA sites only
@@ -500,7 +500,7 @@ lobster_table %>%
 ```
 
 
-```{r}
+```{r, include=FALSE}
 # ------------
 # Run t.tests.
 # ------------
@@ -581,13 +581,59 @@ sd_mpa_2012 <- sd(lobster_size_mpa_2012$size_mm, na.rm = TRUE)
 sd_mpa_2018 <- sd(lobster_size_mpa_2018$size_mm, na.rm = TRUE)
 sd_non_mpa_2012 <- sd(lobster_size_non_mpa_2012$size_mm, na.rm = TRUE)
 sd_non_mpa_2018 <- sd(lobster_size_non_mpa_2018$size_mm, na.rm = TRUE)
+
+# cohen's d
+cd_mpa_2012_2018 <- effsize::cohen.d(lobster_size_mpa_2018$size_mm,
+                                     lobster_size_mpa_2012$size_mm, 
+                                     na.rm = TRUE)
+
+cd_non_mpa_2012_2018 <- effsize::cohen.d(lobster_size_non_mpa_2012$size_mm,
+                                         lobster_size_non_mpa_2018$size_mm,
+                                         na.rm = TRUE)
+
+cd_mpa_non_mpa_2012 <- effsize::cohen.d(lobster_size_non_mpa_2012$size_mm,
+                                     lobster_size_mpa_2012$size_mm, 
+                                     na.rm = TRUE)
+
+cd_mpa_non_mpa_2018 <- effsize::cohen.d(lobster_size_mpa_2018$size_mm,
+                                     lobster_size_non_mpa_2018$size_mm, 
+                                     na.rm = TRUE)
+
+
+# cd_mpa_2018 <- effsize::cohen.d(lobster_size_mpa_2018$size_mm, na.rm = TRUE)
+# cd_non_mpa_2018 <- effsize::cohen.d(lobster_size_non_mpa_2018$size_mm, na.rm = TRUE)
+
+# p_mpa_non_mpa_2012 <- t.test()$p.value; ifelse(P > 0.001, P, "<0.001")
+
+# p_mpa_2012_2018 <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_mpa_2018$size_mm)$p.value; ifelse(p_mpa_2012_2018 > 0.001, p_mpa_2012_2018, "<0.001")
+# 
+# p_non_mpa_2012_2018 <- t.test(lobster_size_non_mpa_2012$size_mm, lobster_size_non_mpa_2018$size_mm)$p.value; ifelse(p_non_mpa_2012_2018 > 0.001, p_non_mpa_2012_2018, "<0.001")
+# 
+# p_mpa_non_mpa_2012 <- t.test(lobster_size_mpa_2012$size_mm, lobster_size_non_mpa_2012$size_mm)$p.value; ifelse(p_mpa_non_mpa_2012 > 0.001, p_mpa_non_mpa_2012, "<0.001")
+# 
+# p_mpa_non_mpa_2018 <- t.test(lobster_size_mpa_2018$size_mm, lobster_size_non_mpa_2018$size_mm)$p.value; ifelse(p_mpa_non_mpa_2018 > 0.001, p_mpa_non_mpa_2018, "<0.001")
 ```
-Mean lobster size increased significantly overall in Marine Protected Areas. While the mean lobster size did not significantly increase in Non-Marine Protected Areas
+Mean lobster size increased significantly overall in Marine Protected Areas. While the mean lobster size did not significantly increase in Non-Marine Protected Areas.
 
-For the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean for 2012 is `r round(mean_mpa_2012, 2)` $\pm$ `r round(sd_mpa_2012, 2)`, and the mean for 2018 is `r round(mean_mpa_2018, 2)` $\pm$ `r round(sd_mpa_2018, 2)` with an actual difference in mean size between the two years being `r round(mean_mpa_2018 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p = `r round(mpa_2012_2018_ttest$p.value, 4)`)
+For the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean for 2012 is `r round(mean_mpa_2012, 2)` $\pm$ `r round(sd_mpa_2012, 2)`, and the mean for 2018 is `r round(mean_mpa_2018, 2)` $\pm$ `r round(sd_mpa_2018, 2)` with an actual difference in mean size between the two years being `r round(mean_mpa_2018 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p < 0.001 with an effect size of `r round(cd_mpa_2012_2018$estimate, 2)`. This shows significant increase in mean lobster size between 2012 and 2018 in Marine Protected Areas.
 
-For the three Non-Marine Protected Areas, comparing the means between 2012 and 2018, the mean for 2012 is `r round(mean_non_mpa_2012, 2)` $\pm$ `r round(sd_non_mpa_2012, 2)`, the mean for 2018 is `r round(mean_non_mpa_2018, 8)` $\pm$ `r round(sd_non_mpa_2012, 2)` with an actual difference in mean size between the two years being `r round(mean_non_mpa_2018 - mean_non_mpa_2012, 2)` (two-sited t-test, t(`r round(non_mpa_2012_2018_ttest$parameter, 2)`) = `r round(non_mpa_2012_2018_ttest$statistic, 2)`, p = `r round(non_mpa_2012_2018_ttest$p.value, 2)`)
+For the three Non-Marine Protected Areas, comparing the means between 2012 and 2018, the mean for 2012 is `r round(mean_non_mpa_2012, 2)` $\pm$ `r round(sd_non_mpa_2012, 2)`, the mean for 2018 is `r round(mean_non_mpa_2018, 2)` $\pm$ `r round(sd_non_mpa_2012, 2)` with an actual difference in mean size between the two years being `r round(mean_non_mpa_2018 - mean_non_mpa_2012, 2)` (two-sited t-test, t(`r round(non_mpa_2012_2018_ttest$parameter, 2)`) = `r round(non_mpa_2012_2018_ttest$statistic, 2)`, p = `r round(non_mpa_2012_2018_ttest$p.value, 3)`) with an effect size of `r round(cd_non_mpa_2012_2018$estimate, 2)`. This shows no significant increase in mean lobster size between 2012 and 2018 in Non-Marine Protected Areas.
 
-For 2012, between Marine Protected Areas and Non-Marine Protected Areas, with an actual difference in mean size between the two areas being `r round(mean_non_mpa_2012 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_non_mpa_2012_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2012_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2012_ttest$p.value, 4)`)
+For 2012, between Marine Protected Areas and Non-Marine Protected Areas, with an actual difference in mean size between the two areas being `r round(mean_non_mpa_2012 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_non_mpa_2012_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2012_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2012_ttest$p.value, 3)` with an effect size of `r round(cd_mpa_non_mpa_2012$estimate, 2)`. This shows significant difference in mean lobster size in 2012 between Marine Protected Areas and  Non-Marine Protected Areas.
 
-For 2018, between Marine Protected Areas and Non-Marine Protected Areas, with an actual difference in mean size between the two areas being `r round(mean_mpa_2018 - mean_non_mpa_2018, 2)` (two - sided t-test t(`r round(mpa_non_mpa_2018_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2018_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2018_ttest$p.value, 4)`)
+For 2018, between Marine Protected Areas and Non-Marine Protected Areas, with an actual difference in mean size between the two areas being `r round(mean_mpa_2018 - mean_non_mpa_2018, 2)` (two - sided t-test t(`r round(mpa_non_mpa_2018_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2018_ttest$statistic, 2)`, p < 0.001 with an effect size of `r round(cd_mpa_non_mpa_2018$estimate, 2)`. This shows significant difference in mean lobster size in 2018 between Marine Protected Areas and  Non-Marine Protected Areas.
+
+#### Summary
+
+- Making sites Marine Protected Areas creates greater increases in lobster abundance (Figure 3)
+- Lobster size increased in greater amounts in the two Marine Protected Areas than in the three Non-Marine Protected Areas (Figure 4)
+- Mean lobster size increased significantly overall in Marine Protected Areas and mean lobster size did not significantly increase in Non-Marine Protected Areas (Figure 5)
+
+#### References
+
+**Foster, Michael S., and David R. Schiel.** “Loss of Predators and the Collapse of Southern California Kelp Forests: Alternatives, Explanations and Generalizations.” Journal of Experimental Marine Biology and Ecology, vol. 393, no. 1-2, 2010, pp. 59–70., doi:10.1016/j.jembe.2010.07.002.
+
+**Reed D. 2019.** SBC LTER: Reef: Abundance, size and fishing effort for California Spiny Lobster (Panulirus interruptus), ongoing since 2012. Environmental Data Initiative. https://doi.org/10.6073/pasta/a593a675d644fdefb736750b291579a0. Dataset accessed 11/17/2019.
+
+
+
