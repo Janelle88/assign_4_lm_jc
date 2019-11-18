@@ -29,7 +29,7 @@ Credit: [Catalina Island Marine Institute](https://cimioutdoored.org/wp-content/
 
 ### Data and Methods
 
-Data for this project was collected from 2012 - 2018 by the Santa Barbara Channel Long Term Ecological Research team. Lobster numbers and sizes were collected by divers at five sites, including two Marine Protected Areas (Naples and Isla Vista) and three Non-Marine Protected Areas (Arroyo Quemado, Mohawk and Carpinteria). All the samples were gathered in the late summer before the start of the fishing season. All the data was gathered in four 300m^2 area (60m x 5m ) lobster transects. Trends in Marine Protected Areas were compared with trends in Non-Marine protected Areas. All data was analyzed and put into figures through the software R version 3.6.1. 
+Data for this project was collected from 2012 - 2018 by the Santa Barbara Channel Long Term Ecological Research team. Lobster numbers and sizes were collected by divers at five sites, including two Marine Protected Areas (Naples and Isla Vista) and three Non-Marine Protected Areas (Arroyo Quemado, Mohawk and Carpinteria). All the samples were gathered in the late summer before the start of the fishing season. All the data was gathered in four 300m^2^ area (60m x 5m) lobster transects. Trends in Marine Protected Areas were compared with trends in Non-Marine protected Areas. All data was analyzed and put into figures through the software R version 3.6.1. 
 
 ### Results
 
@@ -492,7 +492,7 @@ lobster_table <- lobster_size %>%
 lobster_table %>% 
   kable(col.names = c("Marine Protected Area (MPA)",
                       "Year",
-                      "Mean Lobster Size (cm)",
+                      "Mean Lobster Size (mm)",
                       "Standard Deviation of Lobster Size",
                       "Number of Lobsters")) %>% 
   kable_styling(bootstrap_options = "striped",
@@ -617,7 +617,7 @@ cd_mpa_non_mpa_2018 <- effsize::cohen.d(lobster_size_mpa_2018$size_mm,
 ```
 Mean lobster size increased significantly overall in Marine Protected Areas. While the mean lobster size did not significantly increase in Non-Marine Protected Areas.
 
-For the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean for 2012 is `r round(mean_mpa_2012, 2)` $\pm$ `r round(sd_mpa_2012, 2)`, and the mean for 2018 is `r round(mean_mpa_2018, 2)` $\pm$ `r round(sd_mpa_2018, 2)` with an actual difference in mean size between the two years being `r round(mean_mpa_2018 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p < 0.001 with an effect size of `r round(cd_mpa_2012_2018$estimate, 2)`. This shows significant increase in mean lobster size between 2012 and 2018 in Marine Protected Areas.
+For the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean for 2012 is `r round(mean_mpa_2012, 2)` $\pm$ `r round(sd_mpa_2012, 2)`, and the mean for 2018 is `r round(mean_mpa_2018, 2)` $\pm$ `r round(sd_mpa_2018, 2)` with an actual difference in mean size between the two years being `r round(mean_mpa_2018 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p < 0.001) with an effect size of `r round(cd_mpa_2012_2018$estimate, 2)`. This shows significant increase in mean lobster size between 2012 and 2018 in Marine Protected Areas.
 
 For the three Non-Marine Protected Areas, comparing the means between 2012 and 2018, the mean for 2012 is `r round(mean_non_mpa_2012, 2)` $\pm$ `r round(sd_non_mpa_2012, 2)`, the mean for 2018 is `r round(mean_non_mpa_2018, 2)` $\pm$ `r round(sd_non_mpa_2012, 2)` with an actual difference in mean size between the two years being `r round(mean_non_mpa_2018 - mean_non_mpa_2012, 2)` (two-sited t-test, t(`r round(non_mpa_2012_2018_ttest$parameter, 2)`) = `r round(non_mpa_2012_2018_ttest$statistic, 2)`, p = `r round(non_mpa_2012_2018_ttest$p.value, 3)`) with an effect size of `r round(cd_non_mpa_2012_2018$estimate, 2)`. This shows no significant increase in mean lobster size between 2012 and 2018 in Non-Marine Protected Areas.
 
@@ -627,9 +627,9 @@ For 2018, between Marine Protected Areas and Non-Marine Protected Areas, with an
 
 #### Summary
 
-- Making sites Marine Protected Areas creates greater increases in lobster abundance (Figure 3)
-- Lobster size increased in greater amounts in the two Marine Protected Areas than in the three Non-Marine Protected Areas (Figure 4)
-- Mean lobster size increased significantly overall in Marine Protected Areas and mean lobster size did not significantly increase in Non-Marine Protected Areas (Figure 5)
+- Making sites Marine Protected Areas creates greater increases in lobster abundance and size (Figure 3 and 5).
+- Lobster size increased more in the two Marine Protected Areas than in the three Non-Marine Protected Areas (Figure 4).
+- Mean lobster size increased significantly overall in Marine Protected Areas and mean lobster size did not significantly increase in Non-Marine Protected Areas. Mean lobster size grew by 10.19 mm in Marine Protected areas whereas they decreased by 1.3 mm in Non-Marine Protected Areas (Figure 5 and 6).
 
 #### References
 
