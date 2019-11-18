@@ -1,7 +1,7 @@
 ---
 title: "Spiny Lobster Abundance in California"
 author: "Janelle Christensen & Lauren Manzo"
-date: "11/11/2019"
+date: "11/18/2019"
 output: html_document
 ---
 
@@ -14,25 +14,26 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 The California Spiny Lobster (*panulirus interruptus*) is an important species in the kelp forests in California. Lobsters are a vital predator of kelp-eating sea urchins. Without predation, sea urchins have the ability to demolish kelp forests and create urchin barrens, destroying the ecological diversity that kelp forests create.
 
-The Santa Barbara Chanel Long Term Ecological Research (SBC LTER)
-
+Figure 1. The Santa Barbara Chanel Long Term Ecological Research (SBC LTER)
 ![Santa Barbara Channel Long Term Ecological Research Sites](pictures/sb_coast.png)
+Credit: [SBC LTER](https://portal.lternet.edu/nis/mapbrowse?packageid=knb-lter-sbc.77.3)
 
+Figure 2. California Spiny Lobster
 ![Spiny Lobster](pictures/catalina_island_marine_institute.jpg)
-
+Credit: [Catalina Island Marine Institute](https://cimioutdoored.org/wp-content/uploads/2017/09/California-Spiny-Lobster.jpg)
 
 ### Data and Methods
 
 Data for this project was collected from 2012-2018 by the Santa Barbara Chanel Long Term Ecological Research team. Lobster numbers and sizes were collected by divers at 5 sites, including two Marine Protected Areas (Naples and Isla Vista) and three (Arroyo Quemado, Mohawk and Carpinteria). All samples were gathered in the late summer before the start of the fishing season.
  
 
-Naples and Isla Vista were designated Marine Protected Areas in January 2012
+Naples and Isla Vista were designated Marine Protected Areas in January 2012.
 
 ### Results
 
-##### Results A
+##### 1. Observed annual lobster abundance at the five sites over time
 
-group by year, showing changes in annual lobster abundance at the five sites over time
+In the two marine protected areas, lobster numbers increased by 1212 lobsters (increasing by an average of 242.4 lobsters per year). While lobsters in the three Non-Marine Protected Areas increased by only 362 lobsters (increasing by an average of 72.4 lobsters per year).
 
 ```{r, echo=FALSE}
 # -------------------------
@@ -97,7 +98,8 @@ lobster_year <- lobster_df %>%
 ```
 
 
-```{r}
+```{r, fig.cap="Figure 3: Annual lobster abundance observed from 2012 - 2018 in five sites that were either Marine Protected (dark blue) or Non-Marine Protected Areas (light orange) in the Santa Barbara Channel. Marine Protected Areas showed change in lobster abundance over the sampling period. Data: SBC LTER"}
+
 # ---------------
 # Create Graph A
 # ---------------
@@ -110,8 +112,7 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
 # Color lines by site and specify line size.
   labs(color = "Marine Protected Area (MPA)",
        x = "Year",
-       y = "Annual lobster abundance (counts)",
-       title = "Changes in annual lobster abundance (counts) by site") + 
+       y = "Annual lobster abundance (counts)") + 
 # Use color to create the legend title and create 
 # labels for the x and y axes and title.
   theme_light() +
@@ -129,15 +130,17 @@ ggplot(data = lobster_year, aes(x = year, y = total, group = site)) +
   scale_y_continuous(expand = c(0,0),
                      limits = c(0, 1000)) +
 # Needed to expand limits for site names.
-  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) +
+  scale_color_manual(breaks = c("MPA", "Non-MPA"), values = c("royalblue4", "sandybrown")) 
 # Manually change line colors in graph based on 
 # whether a site is MPA or Non-MPA.
-  labs(caption = bolditalic("Figure 1.")~italic("more caption")) 
-# Create caption below the graph and edit font size and style.
 
 ```
 
-```{r, echo=FALSE}
+##### 2. Lobster size distribution shifts in each site between the years 2012 and 2018
+
+Lobster sizes in the three Non-Marine Protected Areas were observed to have less than noticeable shifts in lobster sizes whereas lobsters. While lobster sizes in Marine Protected Areas did have noticeable shifts. 
+
+```{r}
 # ------------------------------
 # Create clean data for Graph B
 # ------------------------------
@@ -168,7 +171,7 @@ lobster_size$site_name <- factor(lobster_size$site_name , levels=c("Mohawk", "Ca
 
 ```
 
-```{r}
+```{r, fig.cap="Figure 4: Lobster sizes observed from 2012 and 2018 by dive surveys in five sites that were either Marine Protected (dark blue) or Non-Marine Protected Areas (light orange) in the Santa Barbara Channel. Marine Protected Areas showed change in lobster size over the sampling period. Dashed line is seperating Marine Protected Areas and Non-Marine Protected Areas. Data: SBC LTER"}
 # ---------------
 # Create Graph B
 # ---------------
@@ -196,12 +199,9 @@ ggplot(data = lobster_size,
 # Create a title for the legend.
   theme_minimal() +
 # Call out a theme to tweak the display of an existing theme.
-  labs(title = "Lobster size distribution shifts in 2012 vs. 2018",
-     x = "Year", 
-     y = "Size (mm)",
-     caption = bolditalic("Figure 2.")~italic("more caption")) +
+  labs(x = "Year", 
+     y = "Size (mm)") +
 # Create labels for the x and y axes and title.
-# Create caption below the graph and edit font size and style.
     geom_vline(xintercept = 3.5, 
              linetype = "dashed", 
              color = "black", 
@@ -249,8 +249,11 @@ lobster_size_av <- lobster_size %>%
 
 ```
 
+##### 3. Mean lobster sizes at Marine Protected Areas vs. Non-Marine Protected Areas
 
-```{r}
+
+
+```{r, fig.cap="Figure 5: Lobster size in Marine Protectd Areas and Non-Marine Protected Areas in 2012 and 2018 kernal denisty for mean lobster size in Marine Protected Areas in 2012 (dark blue) and 2018 (light blue) and Non-Marine Protected Areas in 2012 (dark orange) and 2018 (light orange). The means are shown as dashed lines. Data: SBC LTER}
 
 # ---------------------------------------------------
 # Create data for part 1 of Graph C - MPA sites only
@@ -345,8 +348,7 @@ mpa_graph <- ggplot(data = lobster_size_mpa, aes(x = size_mm,
 # Means taken from lobster_size_av dataframe.
 # Using vline allows me to draw a vertical line of the mean.
   labs(x = "Lobster Length (mm)",
-       y = "Kernel Density",
-       caption = bolditalic("Figure 3.")~italic("more caption"))
+       y = "Kernel Density")
 # Create labels for the x and y axes and title.
 # Create caption below the graph and edit font size and style.
 
@@ -442,8 +444,7 @@ non_mpa_graph <- ggplot(data = lobster_size_non_mpa, aes(x = size_mm,
 # Means taken from lobster_size_av dataframe.
 # Using vline allows me to draw a vertical line for the means.
   labs(x = "Lobster Length (mm)",
-       y = "Kernel Density",
-       caption = bolditalic("Figure 4.")~italic("more caption"))
+       y = "Kernel Density")
 # Create labels for the x and y axes and title.
 # Create caption below the graph and edit font size and style.
 
@@ -469,7 +470,7 @@ ggplot(data = lobster_size, aes(sample = size_mm)) +
 # means look normally distributed, despite a few outliers at carpinteria and IV
 
 ```
-
+Figure 6. The mean, standard deviation, and sample sizes of lobsters observed in Marine Protected Areas and Non-Marine Protected Areas in 2012 and 2018.
 ```{r}
 # -------------
 # Make summary table
@@ -581,7 +582,7 @@ sd_mpa_2018 <- sd(lobster_size_mpa_2018$size_mm, na.rm = TRUE)
 sd_non_mpa_2012 <- sd(lobster_size_non_mpa_2012$size_mm, na.rm = TRUE)
 sd_non_mpa_2018 <- sd(lobster_size_non_mpa_2018$size_mm, na.rm = TRUE)
 ```
-
+Mean lobster size increased significantly overall in Marine Protected Areas. While the mean lobster size did not significantly increase in Non-Marine Protected Areas
 
 For the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean for 2012 is `r round(mean_mpa_2012, 2)` $\pm$ `r round(sd_mpa_2012, 2)`, and the mean for 2018 is `r round(mean_mpa_2018, 2)` $\pm$ `r round(sd_mpa_2018, 2)` with an actual difference in mean size between the two years being `r round(mean_mpa_2018 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p = `r round(mpa_2012_2018_ttest$p.value, 4)`)
 
