@@ -560,24 +560,33 @@ n_mpa <- sum(mpa_lobster_count$total_count)
 n_non_mpa <- sum(non_mpa_lobster_count$total_count)
 
 # Means:
-mean_mpa <- mean(lobster_size_mpa$size_mm, na.rm = TRUE)
-mean_non_mpa <- mean(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+# mean_mpa <- mean(lobster_size_mpa$size_mm, na.rm = TRUE)
+# mean_non_mpa <- mean(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+mean_mpa_2012 <- mean(lobster_size_mpa_2012$size_mm, na.rm = TRUE)
+mean_mpa_2018 <- mean(lobster_size_mpa_2018$size_mm, na.rm = TRUE)
+mean_non_mpa_2012 <- mean(lobster_size_non_mpa_2012$size_mm, na.rm = TRUE)
+mean_non_mpa_2018 <- mean(lobster_size_non_mpa_2018$size_mm, na.rm = TRUE)
 
 # Medians:
-median_mpa <- median(lobster_size_mpa$size_mm, na.rm = TRUE)
-median_non_mpa <- median(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+median_mpa_2012 <- median(lobster_size_mpa_2012$size_mm, na.rm = TRUE)
+median_mpa_2018 <- median(lobster_size_mpa_2018$size_mm, na.rm = TRUE)
+median_non_mpa_2012 <- median(lobster_size_non_mpa_2012$size_mm, na.rm = TRUE)
+median_non_mpa_2018 <- median(lobster_size_non_mpa_2018$size_mm, na.rm = TRUE)
 
 # Standard deviations:
-sd_mpa <- sd(lobster_size_mpa$size_mm, na.rm = TRUE)
-sd_non_mpa <- sd(lobster_size_non_mpa$size_mm, na.rm = TRUE)
-
+# sd_mpa <- sd(lobster_size_mpa$size_mm, na.rm = TRUE)
+# sd_non_mpa <- sd(lobster_size_non_mpa$size_mm, na.rm = TRUE)
+sd_mpa_2012 <- sd(lobster_size_mpa_2012$size_mm, na.rm = TRUE)
+sd_mpa_2018 <- sd(lobster_size_mpa_2018$size_mm, na.rm = TRUE)
+sd_non_mpa_2012 <- sd(lobster_size_non_mpa_2012$size_mm, na.rm = TRUE)
+sd_non_mpa_2018 <- sd(lobster_size_non_mpa_2018$size_mm, na.rm = TRUE)
 ```
 
 
-for the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean is `r round(mean_mpa, 2)` $\pm$ `r round(sd_mpa, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p = `r round(mpa_2012_2018_ttest$p.value, 4)`)
+For the two Marine protected areas, comparing the means between 2012 and 2018 (n = `r n_mpa`), the mean for 2012 is `r round(mean_mpa_2012, 2)` $\pm$ `r round(sd_mpa_2012, 2)`, and the mean for 2018 is `r round(mean_mpa_2018, 2)` $\pm$ `r round(sd_mpa_2018, 2)` with an actual difference in mean size between the two years being `r round(mean_mpa_2018 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_2012_2018_ttest$parameter, 2)`) = `r round(mpa_2012_2018_ttest$statistic, 2)`, p = `r round(mpa_2012_2018_ttest$p.value, 4)`)
 
-for the three Non-Marine Protected Areas, comparing the means between 2012 and 2018, the mean is `r round(mean_non_mpa, 2)` $\pm$ `r round(sd_non_mpa, 2)` (two-sited t-test, t(`r round(non_mpa_2012_2018_ttest$parameter, 2)`) = `r round(non_mpa_2012_2018_ttest$statistic, 2)`, p = `r round(non_mpa_2012_2018_ttest$p.value, 2)`)
+For the three Non-Marine Protected Areas, comparing the means between 2012 and 2018, the mean for 2012 is `r round(mean_non_mpa_2012, 2)` $\pm$ `r round(sd_non_mpa_2012, 2)`, the mean for 2018 is `r round(mean_non_mpa_2018, 8)` $\pm$ `r round(sd_non_mpa_2012, 2)` with an actual difference in mean size between the two years being `r round(mean_non_mpa_2018 - mean_non_mpa_2012, 2)` (two-sited t-test, t(`r round(non_mpa_2012_2018_ttest$parameter, 2)`) = `r round(non_mpa_2012_2018_ttest$statistic, 2)`, p = `r round(non_mpa_2012_2018_ttest$p.value, 2)`)
 
-for 2012, between Marine Protected Areas and Non-Marine Protected Areas (two-sided t-test, t(`r round(mpa_non_mpa_2012_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2012_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2012_ttest$p.value, 4)`)
+For 2012, between Marine Protected Areas and Non-Marine Protected Areas, with an actual difference in mean size between the two areas being `r round(mean_non_mpa_2012 - mean_mpa_2012, 2)` (two-sided t-test, t(`r round(mpa_non_mpa_2012_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2012_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2012_ttest$p.value, 4)`)
 
-for 2018, between Marine Protected Areas and Non-Marine Protected Areas (two - sided t-test t(`r round(mpa_non_mpa_2018_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2018_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2018_ttest$p.value, 4)`)
+For 2018, between Marine Protected Areas and Non-Marine Protected Areas, with an actual difference in mean size between the two areas being `r round(mean_mpa_2018 - mean_non_mpa_2018, 2)` (two - sided t-test t(`r round(mpa_non_mpa_2018_ttest$parameter, 2)`) = `r round(mpa_non_mpa_2018_ttest$statistic, 2)`, p = `r round(mpa_non_mpa_2018_ttest$p.value, 4)`)
